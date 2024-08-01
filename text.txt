@@ -1,0 +1,37 @@
+<div class="side-nav">
+      <?php foreach($directoryStructure as $key=>$singale_directory){?>
+        <div class="nav-component">
+            <div class="title">
+                <h4><?php echo $key?></h4>
+            </div>
+            <div class="links">
+                <ul>
+                    <li>
+                        <?php foreach($singale_directory as $menu){ ?>
+                       
+                            <p onclick="dynamiclyPdfRender('<?php echo addslashes(htmlspecialchars($menu['path']))?>',  '<?php echo addslashes(htmlspecialchars($menu['name'])) ?>')"><?php echo $menu['name']?> </p>
+
+                        <?php }?>
+                    </li>
+                </ul>
+            </div>
+        </div>
+      <?php } ?>
+</div>
+
+<div class="pdf-viwer">
+        <iframe id="pdf-viwer" class="iframe" src="<?php echo initalPdfLink($directoryStructure) ?>" frameborder="0"></iframe>
+</div>
+
+<script>
+    const BASEURL = 'http://127.0.0.1/';
+    const pdfViwer = document.getElementById('pdf-viwer');
+
+    function dynamiclyPdfRender(link,name) {
+        document.cookie = 'curentPage= '+ name;
+        let sliceingLink = link.slice(16);
+        let mainLink = sliceingLink.replace(/\\/g, '/');
+        document.cookie = 'curentPage= '+ name;
+        pdfViwer.src = BASEURL + mainLink; 
+    }
+</script>
