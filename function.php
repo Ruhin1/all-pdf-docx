@@ -1,49 +1,47 @@
 <?php
 
+// Define application constants
+define('APPNAME', 'My Docx');
+define('BASEURL', 'http://127.0.0.1/');
 
+// Scan the root documentation directory
+$result1 = scandir(__DIR__ . '/documentation');
 
+// Filter out '.' and '..' from the scanned results
+$rootFolder = array_filter($result1, function ($data) {
+    return $data != '.' && $data != '..';
+});
 
-// echo "<script>alert();</script>";
-
-
-
-
-
-define('BASEURL','My Docx');
-
-$result1 = scandir( __DIR__ . '/documentation');
-
-$rootFolder = array_filter($result1,
-    function ($data){
-        return $data != '.' && $data != '..';
-    }
-);
-
-function redirect(string $page){
-    $status_code = ['code'=>301];
+// Function to handle redirection with status code
+function redirect(string $page) {
+    $status_code = ['code' => 301];
     $queryString = http_build_query($status_code);
     header("location:$page?$queryString");
     exit();
 }
 
-
-$tutorals = 'php';
-
-if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit']) && !empty($_POST['tacnolajy'])){
-
-    $tutorals = $_POST['tacnolajy'];
+// Check if 'tutorals' cookie is set, otherwise default to 'php'
+if (isset($_COOKIE['tutorals'])) {
+    $tutorals = $_COOKIE['tutorals'];
+} else {
+    $tutorals = 'php';
 }
 
+// Handle form submission and set 'tutorals' cookie
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit']) && !empty($_POST['tacnolajy'])) {
+    $tutorals = $_POST['tacnolajy'];
+    setcookie('tutorals', $tutorals, time() + 3600, '/');
+}
 
+// Define the folder path based on the selected 'tutorals'
 $folderPath = __DIR__ . '/documentation/' . $tutorals;
-   
-function scanDirectory($folderPath) {
-    try{
 
-        if(is_dir($folderPath)){
+// Function to recursively scan a directory and return its structure
+function scanDirectory($folderPath) {
+    try {
+        if (is_dir($folderPath)) {
             $result = [];
             $files = scandir($folderPath);
-           
             foreach ($files as $file) {
                 if ($file !== '.' && $file !== '..') {
                     $fullPath = $folderPath . '/' . $file;
@@ -59,58 +57,46 @@ function scanDirectory($folderPath) {
                     }
                 }
             }
-        
             return $result;
-        }else{
+        } else {
+            // Redirect if the folder path is not valid
             redirect('./errorpage.php');
         }
-
-    }catch(Exception $error){
-        redirect('./errorpage.php'); 
-    }   
+    } catch (Exception $error) {
+        // Redirect in case of an exception
+        redirect('./errorpage.php');
+    }
 }
 
- 
+// Get the directory structure of the specified folder
 $directoryStructure = scanDirectory($folderPath);
-// echo '<pre>';
-// var_dump($directoryStructure);
-// echo '</pre>';
-// die();
-function convertPath(string $path,int $sliceIndex) {
-    $slicingLink = substr($path,$sliceIndex);
+
+// Function to convert file paths to a URL format
+function convertPath(string $path, int $sliceIndex) {
+    $slicingLink = substr($path, $sliceIndex);
     $mainLink = str_replace('\\', '/', $slicingLink);
-    return '.'.$mainLink;
+    return BASEURL . basename(__DIR__) . $mainLink;
 }
 
-function initalPdfLink(array $directoryStructure){
+// Function to get the initial PDF link from the directory structure
+function initalPdfLink(array $directoryStructure) {
     $initalPdfLink = '';
-    foreach($directoryStructure as $key=>$singale_directory){
-        foreach($singale_directory as $menu){
+    foreach ($directoryStructure as $key => $singale_directory) {
+        foreach ($singale_directory as $menu) {
             $initalPdfLink = $menu['path'];
             break;
         }
         break;
     }
-   
-   return convertPath($initalPdfLink,20); 
-} 
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pdfPath']) && isset($_POST['pdfName'])) {
-    $cruentPage = convertPath($_POST['pdfPath'],20);
-    //setcookie('currentPage', $_POST['pdfName'], time() + 3600, '/');
-    header("Location: ".$_SERVER['PHP_SELF'].'?pdfpage='.$_POST['pdfName']);
-    exit();
-}else{
-    $cruentPage = initalPdfLink($directoryStructure);
+    return convertPath($initalPdfLink, 22);
 }
 
-
-
-
-
-
-
-
-
-
-
+// Handle form submission for PDF path and name, and set the 'currentPage' cookie
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pdfPath']) && isset($_POST['pdfName'])) {
+    $cruentPage = convertPath($_POST['pdfPath'], 22);
+    setcookie('currentPage', $_POST['pdfName'], time() + 3600, '/');
+} else {
+    // Set the initial PDF link if no form submission
+    $cruentPage = initalPdfLink($directoryStructure);
+}
+?>

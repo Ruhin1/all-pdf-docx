@@ -1,37 +1,88 @@
-<div class="side-nav">
-      <?php foreach($directoryStructure as $key=>$singale_directory){?>
-        <div class="nav-component">
-            <div class="title">
-                <h4><?php echo $key?></h4>
-            </div>
-            <div class="links">
-                <ul>
-                    <li>
-                        <?php foreach($singale_directory as $menu){ ?>
-                       
-                            <p onclick="dynamiclyPdfRender('<?php echo addslashes(htmlspecialchars($menu['path']))?>',  '<?php echo addslashes(htmlspecialchars($menu['name'])) ?>')"><?php echo $menu['name']?> </p>
+# My Docx
 
-                        <?php }?>
-                    </li>
-                </ul>
-            </div>
-        </div>
-      <?php } ?>
-</div>
+My Docx is a web-based application for browsing and viewing documentation files (PDFs) stored in a structured directory. It allows users to select different technologies and navigate through their respective directories to view the documentation files.
 
-<div class="pdf-viwer">
-        <iframe id="pdf-viwer" class="iframe" src="<?php echo initalPdfLink($directoryStructure) ?>" frameborder="0"></iframe>
-</div>
+## Table of Contents
 
-<script>
-    const BASEURL = 'http://127.0.0.1/';
-    const pdfViwer = document.getElementById('pdf-viwer');
+1. [Features](#features)
+2. [Installation](#installation)
+3. [Usage](#usage)
+4. [Screenshots](#screenshots)
+5. [Directory Structure](#directory-structure)
+6. [Contributing](#contributing)
+7. [License](#license)
+8. [Contact](#contact)
 
-    function dynamiclyPdfRender(link,name) {
-        document.cookie = 'curentPage= '+ name;
-        let sliceingLink = link.slice(16);
-        let mainLink = sliceingLink.replace(/\\/g, '/');
-        document.cookie = 'curentPage= '+ name;
-        pdfViwer.src = BASEURL + mainLink; 
-    }
-</script>
+## Features
+
+- **Browse Documentation**: View documentation files stored in a structured directory.
+- **Technology Selection**: Select different technologies to browse their respective documentation.
+- **Dynamic PDF Viewing**: View selected PDF files within an iframe.
+- **Persistent State**: Remember the selected technology and last viewed PDF using cookies.
+
+## Installation
+
+### Prerequisites
+
+- Web server with PHP support (e.g., Apache, Nginx)
+- PHP 7.4 or higher
+- Git
+
+### Steps
+
+1. **Clone the Repository**:
+    ```bash
+    git clone https://github.com/yourusername/my-docx.git
+    cd my-docx
+    ```
+
+2. **Set Up Directory Permissions**:
+    Ensure your web server has read access to the `documentation` directory.
+
+3. **Start Your Web Server**:
+    Ensure your web server is running and serving the project directory.
+
+## Usage
+
+1. **Open Your Browser**:
+    Navigate to `http://127.0.0.1/path-to-your-project/` (replace `path-to-your-project` with the actual path).
+
+2. **Select Technology**:
+    Use the dropdown menu to select the desired technology.
+
+3. **Browse and View PDFs**:
+    Click on any documentation link to view the corresponding PDF in the iframe.
+
+## Screenshots
+
+### Home Page
+![Home Page](screenshots/home_page.png)
+
+### Technology Selection
+![Technology Selection](screenshots/technology_selection.png)
+
+### Documentation View
+![Documentation View](screenshots/documentation_view.png)
+
+## Directory Structure
+
+The directory structure should be as follows:
+
+## Contributing
+
+We welcome contributions from the community! Here’s how you can help:
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch`).
+3. Make your changes.
+4. Commit your changes (`git commit -am 'Add new feature'`).
+5. Push to the branch (`git push origin feature-branch`).
+6. Open a Pull Request.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+Developed by [md tonmoy islam ruhin](#). You can reach me at [your-email@example.com](mailto:your-email@example.com).
