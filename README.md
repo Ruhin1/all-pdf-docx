@@ -105,4 +105,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-Developed by [md tonmoy islam ruhin](https://ruhin1.github.io/tonmoy-islam.me/). You can reach me at [your-email@example.com](mailto:mdruhinahmed93@gmail.com).
+Developed by [md tonmoy islam ruhin](https://ruhin1.github.io/tonmoy-islam.me/). You can reach me at [mdruhinahmed93@gmail.com](mailto:mdruhinahmed93@gmail.com).
